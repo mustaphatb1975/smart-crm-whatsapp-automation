@@ -1,45 +1,29 @@
-# Environment variables
-.env
-.env.local
-.env.*.local
+# n8n sensitive files
+*.env
+.env.*
 
-# Credentials & secrets
-credentials.json
-secrets.json
-*credentials*
-*secrets*
-*api_key*
-*apikey*
-
-# n8n local files
-.n8n/
-n8n-data/
+# Credentials
+credentials/
+secrets/
+*.key
+*.pem
 
 # OS files
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Editor files
+# Editor
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # Logs
 *.log
 logs/
+
+# Node
+node_modules/
 npm-debug.log*
 
-# Node modules
-node_modules/
-
-# Backup files
-*.bak
-*.backup
-*.orig
-
-# Sensitive workflow exports (use cleaned versions only)
-*-original.json
-*-raw.json
-*-with-credentials.json
+# Real workflow files with credentials
+*-real.json
+*-prod.json

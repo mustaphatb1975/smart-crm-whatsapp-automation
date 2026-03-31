@@ -1,125 +1,112 @@
 # 🤖 Smart CRM WhatsApp Automation
 
-> Automated post-purchase follow-up system in Moroccan Darija via WhatsApp & Email, with automatic VIP classification.
+> Intelligent CRM system that sends automatic follow-up messages in **Moroccan Darija** via WhatsApp and Email after each purchase, with automatic VIP classification.
 
 ---
 
-## 📋 Overview
+## 🧠 System Overview
 
-This n8n workflow automates customer relationship management after every purchase. It sends personalized follow-up messages in **Moroccan Darija** through WhatsApp and Email, classifies customers as **VIP** based on their purchase history, and logs everything in Airtable.
+This n8n workflow automates post-purchase customer engagement for Moroccan businesses. It uses AI to write culturally authentic follow-up messages in Moroccan Darija (Arabic script), delivered via WhatsApp and Email.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚙️ Tech Stack
 
 | Tool | Role |
 |------|------|
 | **n8n** | Workflow automation engine |
-| **Airtable** | Customer database & CRM |
-| **Evolution API** | WhatsApp messaging gateway |
-| **OpenAI GPT-4.1-mini** | Personalized message generation in Darija |
+| **Airtable** | Customer CRM database |
+| **Evolution API** | WhatsApp messaging |
+| **OpenAI GPT-4.1-mini** | AI message generation in Darija |
 | **Gmail** | Email follow-up delivery |
 
 ---
 
-## ✨ Key Features
-
-- 🛒 **Trigger on Purchase** — workflow fires automatically after each new order
-- 💬 **WhatsApp Follow-up** — sends warm thank-you messages in Moroccan Darija via Evolution API
-- 📧 **Email Follow-up** — professional follow-up email sent via Gmail
-- 🌟 **VIP Auto-Classification** — customers exceeding purchase threshold are automatically tagged as VIP in Airtable
-- 🤖 **AI-Generated Messages** — GPT-4.1-mini crafts personalized, natural-sounding messages per customer
-- 📊 **Airtable Sync** — all interactions are logged and customer records updated in real-time
-
----
-
-## 🔄 Workflow Architecture
+## 🔄 Workflow Logic
 
 ```
-New Purchase Event
-       │
-       ▼
-  Airtable Lookup (Customer Record)
-       │
-       ▼
-  GPT-4.1-mini (Generate Darija Message)
-       │
-    ┌──┴──┐
-    ▼     ▼
-WhatsApp  Gmail
-(Evolution API)
-    │
-    ▼
-Airtable Update (VIP Check & Log)
+Schedule Trigger (Daily 10:00 AM)
+  └─> Airtable: Search customers due for follow-up
+        └─> Filter: Has email OR phone number
+              ├─> AI Agent: Generate personalized Darija message
+              │     ├─> Day 3: Warm thank-you & experience check
+              │     └─> Day 10: "We miss you" + soft offer
+              ├─> WhatsApp (Evolution API): Send message
+              ├─> Gmail: Send email version
+              └─> Airtable: Update follow-up sequence & VIP status
 ```
 
 ---
 
-## 📁 Repository Structure
+## 🌟 Key Features
 
-```
-.
-├── README.md          # Project documentation
-├── workflow.json      # n8n workflow export (credentials removed)
-└── .gitignore         # Excludes sensitive files
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [n8n](https://n8n.io/) instance (self-hosted or cloud)
-- Airtable account with a Customers base
-- Evolution API instance configured with WhatsApp
-- OpenAI API key
-- Gmail account connected via OAuth2
-
-### Setup Steps
-
-1. **Clone this repository**
-   ```bash
-   git clone https://github.com/mustaphatb1975/smart-crm-whatsapp-automation.git
-   ```
-
-2. **Import the workflow**
-   - Open your n8n instance
-   - Go to **Workflows → Import from File**
-   - Select `workflow.json`
-
-3. **Configure credentials** in n8n:
-   - `Airtable API Key`
-   - `Evolution API URL + API Key`
-   - `OpenAI API Key`
-   - `Gmail OAuth2`
-
-4. **Set workflow variables:**
-   - Airtable Base ID & Table name
-   - VIP threshold (e.g., 5 purchases or 500 MAD)
-   - WhatsApp instance name in Evolution API
-
-5. **Activate the workflow** and test with a sample purchase event.
+- **Moroccan Darija AI Copywriting** — Messages written in authentic Arabic script Darija, not formal Arabic
+- **Multi-channel delivery** — WhatsApp + Email simultaneously
+- **Automatic VIP Classification** — Customers who reach purchase threshold get VIP status
+- **Smart Follow-up Sequences** — Day 3 (satisfaction check) → Day 10 (re-engagement offer)
+- **Airtable CRM Integration** — Full customer lifecycle tracking
+- **No hardcoded data** — All customer data fetched dynamically
 
 ---
 
-## ⚙️ Configuration
+## 📋 Airtable Schema Required
 
-| Variable | Description | Example |
-|----------|-------------|----------|
-| `AIRTABLE_BASE_ID` | Your Airtable base ID | `appXXXXXXXXXXXXXX` |
-| `VIP_THRESHOLD` | Purchase count for VIP status | `5` |
-| `WHATSAPP_INSTANCE` | Evolution API instance name | `my-business` |
-| `FROM_EMAIL` | Sender Gmail address | `crm@yourdomain.com` |
+**Table: Customers**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `Customer Name` | Single line text | Full name |
+| `Email` | Email | Customer email |
+| `Phone Number` | Phone | WhatsApp number (international format) |
+| `Last_Order_Date` | Date | Date of last purchase |
+| `Next_Scheduled_Message` | Date | Auto-calculated next follow-up date |
+| `Message_Type` | Single select | `day3` or `day10` |
+| `Followup_Sequence_Num` | Number | Current sequence step |
+| `VIP Status` | Single select | `VIP` or blank |
+| `Total_Purchases` | Currency | Lifetime purchase value |
 
 ---
 
-## 🔒 Security Notes
+## 🚀 Setup Instructions
 
-- All credentials have been **removed** from `workflow.json`
-- Never commit `.env` files or API keys
-- Use n8n's built-in **Credentials Manager** for all secrets
-- WhatsApp numbers are anonymized in this repository
+### 1. Prerequisites
+- n8n instance (self-hosted or cloud)
+- Airtable account with the schema above
+- Evolution API instance connected to WhatsApp
+- OpenAI API key (GPT-4.1-mini access)
+- Gmail account with OAuth configured in n8n
+
+### 2. Import Workflow
+1. Download `workflow.json`
+2. In n8n: **Settings → Import from file**
+3. Upload `workflow.json`
+
+### 3. Configure Credentials
+Update the following in n8n credentials:
+- `Airtable API` — Your Airtable API key
+- `OpenAI API` — Your OpenAI API key
+- `Gmail OAuth2` — Your Gmail account
+- `Evolution API` — Your WhatsApp API endpoint + key
+
+### 4. Update Placeholders in Workflow
+Search and replace:
+- `YOUR_AIRTABLE_BASE_ID` → Your actual Airtable Base ID
+- `YOUR_AIRTABLE_TABLE_CUSTOMERS` → Your table ID
+- `YOUR_EVOLUTION_API_URL` → Your Evolution API URL
+
+### 5. Activate
+- Enable the **Schedule Trigger** node
+- Test with a sample customer record
+- Monitor via n8n execution logs
+
+---
+
+## 📌 Important Notes
+
+- Phone numbers must be in international format: `+212XXXXXXXXX`
+- The AI generates messages in **Moroccan Darija (Arabic script only)** — no Latin, no Classical Arabic
+- VIP classification threshold can be adjusted in the workflow logic
+- All credentials are stored in n8n credential store, never in the workflow file
 
 ---
 
@@ -127,11 +114,10 @@ Airtable Update (VIP Check & Log)
 
 **Mustapha Taleb** — AI Automation Engineer  
 📍 Agadir, Morocco  
-🔗 [LinkedIn](https://www.linkedin.com/in/talebmustapha/)  
-🐙 [GitHub](https://github.com/mustaphatb1975)
+🔗 [LinkedIn](https://www.linkedin.com/in/talebmustapha/) | [GitHub](https://github.com/mustaphatb1975)
 
 ---
 
 ## 📄 License
 
-MIT License — feel free to use and adapt for your projects.
+MIT License — Free to use and modify.
